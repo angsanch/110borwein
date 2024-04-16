@@ -63,9 +63,9 @@ def print_simpson(constant:float):
 
 def borwein(constant:float):
     print_midpoint(constant)
-    print("\n\n", end="")
+    print()
     print_trapezoidal(constant)
-    print("\n\n", end="")
+    print()
     print_simpson(constant)
 
 def main():
