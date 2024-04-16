@@ -1,0 +1,86 @@
+#!/usr/bin/python3
+##
+## EPITECH PROJECT, 2023
+## 110borwein
+## File description:
+## dont you hate integrals
+##
+
+import sys
+import math
+
+LIMIT = 5000
+INTERVALS = 10_000
+INTV_SIZE = (LIMIT / INTERVALS)
+
+def print_usage():
+    print("USAGE")
+    print("\t./110borwein n")
+    print("DESCRIPTION")
+    print("\tn\tconstant defining the integral to be computed")
+
+def calculate_function(x:float, k:float):
+    if x == 0:
+        return 1
+    den = x / ((2 * k) + 1)
+    return math.sin(den) / den
+
+def print_midpoint(constant:float):
+    result = 0
+    for i in range(0, INTERVALS):
+        result += calculate_function((i + 0.5) * INTV_SIZE, constant) * INTV_SIZE
+    print("Midpoint:")
+    print(f"IO = {result:.10f}")
+    print(f"diff = {math.pi / 2 - result:.10f}")
+
+def print_trapezoidal(constant:float):
+    points = []
+    for i in range(0, INTERVALS + 1):
+        x = i * INTV_SIZE
+        points.append(calculate_function(x, constant))
+    result = 0
+    for i in range(0, INTERVALS):
+        result += points[i] * INTV_SIZE + \
+            (((points[i + 1] - points[i]) * INTV_SIZE) / 2)
+    print("Trapezoidal:")
+    print(f"IO = {result:.10f}")
+    print(f"diff = {math.pi / 2 - result:.10f}")
+
+def simpsons_rule_integral(y0, y1, y2):
+    return (INTV_SIZE / 6) * (y0 + 4 * y1 + y2)
+
+def print_simpson(constant:float):
+    points = []
+    for i in range(0, (INTERVALS * 2) + 1):
+        x = i * (INTV_SIZE / 2)
+        points.append(calculate_function(x, constant))
+    result = 0
+    for i in range(0, INTERVALS):
+        result += simpsons_rule_integral(*points[i * 2:i * 2 + 3])
+    print("Simpson:")
+    print(f"IO = {result:.10f}")
+    print(f"diff = {math.pi / 2 - result:.10f}")
+
+def borwein(constant:float):
+    print_midpoint(constant)
+    print("\n\n", end="")
+    print_trapezoidal(constant)
+    print("\n\n", end="")
+    print_simpson(constant)
+
+def main():
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "-h":
+            print_usage()
+        else:
+            borwein(float(sys.argv[1]))
+    else:
+        raise Exception("Invalid amount of arguments.")
+
+if __name__ == "__main__":
+    main()
+    try:
+        pass
+    except Exception as e:
+        print(e, file=sys.stderr)
+        exit(84)
