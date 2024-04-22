@@ -25,48 +25,55 @@ def calculate_function(x:float, k:float):
     den = x / ((2 * k) + 1)
     return math.sin(den) / den
 
-def print_midpoint(constant:float):
+def borwein(x, n):
+    result = 1
+
+    for i in range(0, n + 1):
+        result *= calculate_function(x, i)
+    return (result)
+
+def print_midpoint(n:float):
     result = 0
     for i in range(0, INTERVALS):
-        result += calculate_function((i + 0.5) * INTV_SIZE, constant) * INTV_SIZE
+        result += borwein((i + 0.5) * INTV_SIZE, n) * INTV_SIZE
     print("Midpoint:")
-    print(f"I{constant} = {result:.10f}")
+    print(f"I{n} = {result:.10f}")
     print(f"diff = {math.pi / 2 - result:.10f}")
 
-def print_trapezoidal(constant:float):
+def print_trapezoidal(n:float):
     points = []
     for i in range(0, INTERVALS + 1):
         x = i * INTV_SIZE
-        points.append(calculate_function(x, constant))
+        points.append(borwein(x, n))
     result = 0
     for i in range(0, INTERVALS):
         result += points[i] * INTV_SIZE + \
             (((points[i + 1] - points[i]) * INTV_SIZE) / 2)
     print("Trapezoidal:")
-    print(f"I{constant} = {result:.10f}")
+    print(f"I{n} = {result:.10f}")
     print(f"diff = {math.pi / 2 - result:.10f}")
 
 def simpsons_rule_integral(y0, y1, y2):
     return (INTV_SIZE / 6) * (y0 + 4 * y1 + y2)
 
-def print_simpson(constant:float):
+def print_simpson(n:float):
     points = []
     for i in range(0, (INTERVALS * 2) + 1):
         x = i * (INTV_SIZE / 2)
-        points.append(calculate_function(x, constant))
+        points.append(borwein(x, n))
     result = 0
     for i in range(0, INTERVALS):
         result += simpsons_rule_integral(*points[i * 2:i * 2 + 3])
     print("Simpson:")
-    print(f"I{constant} = {result:.10f}")
+    print(f"I{n} = {result:.10f}")
     print(f"diff = {math.pi / 2 - result:.10f}")
 
-def borwein(constant:float):
-    print_midpoint(constant)
+def stimate(n:float):
+    print_midpoint(n)
     print()
-    print_trapezoidal(constant)
+    print_trapezoidal(n)
     print()
-    print_simpson(constant)
+    print_simpson(n)
 
 def main():
     if len(sys.argv) == 2:
@@ -75,7 +82,7 @@ def main():
         elif int(sys.argv[1]) < 0:
             raise ValueError("Invalid constant")
         else:
-            borwein(int(sys.argv[1]))
+            stimate(int(sys.argv[1]))
     else:
         raise Exception("Invalid amount of arguments.")
 
