@@ -38,7 +38,7 @@ def print_midpoint(n:float):
         result += borwein((i + 0.5) * INTV_SIZE, n) * INTV_SIZE
     print("Midpoint:")
     print(f"I{n} = {result:.10f}")
-    print(f"diff = {math.pi / 2 - result:.10f}")
+    print(f"diff = {abs(math.pi / 2 - result):.10f}")
 
 def print_trapezoidal(n:float):
     points = []
@@ -51,7 +51,7 @@ def print_trapezoidal(n:float):
             (((points[i + 1] - points[i]) * INTV_SIZE) / 2)
     print("Trapezoidal:")
     print(f"I{n} = {result:.10f}")
-    print(f"diff = {math.pi / 2 - result:.10f}")
+    print(f"diff = {abs(math.pi / 2 - result):.10f}")
 
 def simpsons_rule_integral(y0, y1, y2):
     return (INTV_SIZE / 6) * (y0 + 4 * y1 + y2)
@@ -66,7 +66,7 @@ def print_simpson(n:float):
         result += simpsons_rule_integral(*points[i * 2:i * 2 + 3])
     print("Simpson:")
     print(f"I{n} = {result:.10f}")
-    print(f"diff = {math.pi / 2 - result:.10f}")
+    print(f"diff = {abs(math.pi / 2 - result):.10f}")
 
 def stimate(n:float):
     print_midpoint(n)
